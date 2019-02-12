@@ -34,7 +34,7 @@ body,html {
 
 .playing {
   transform: scale(1.1);
-  border-color: #ffc600;
+  border-color: #ee6348; /* adds color border to selected key */
   box-shadow: 0 0 1rem #ffc600;
 }
 
