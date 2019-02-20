@@ -5,8 +5,71 @@
   <title>HTML5 Canvas</title>
 </head>
 <body>
+<input type="range" class="paint-hue" min="0" max="360">
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+
+// range input color change
+const paintColor = document.querySelector('.paint-hue')
+// function takes the range input value and applies it to a variable 'hue'
+function colorChange() {
+  const hue = paintColor.value
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+}
+// on range change, colorchange function is called
+paintColor.addEventListener('change', colorChange)
+
+// creates variable that selects canvas
+const canvas = document.querySelector("#draw")
+
+// sets context to 2d image
+const ctx = canvas.getContext('2d')
+
+// set canvas to match window size
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+// set ctx properties
+// ctx.strokeStyle = '#bada55'
+ctx.lineJoin = 'round'
+ctx.lineCap = 'round'
+ctx.lineWidth = 20
+
+// load with false statement
+let isDrawing = false
+
+// set last axii points to 0
+let lastX = 0
+let lastY = 0
+
+// draw on canvas event
+function draw(e) {
+  // stops function from running when mouse is not down
+  if(!isDrawing) return
+  console.log(e)
+  ctx.beginPath()
+  // start from
+  ctx.moveTo(lastX, lastY)
+  // go to
+  ctx.lineTo(e.offsetX, e.offsetY)
+  ctx.stroke()
+  // [lastX, lastY] = [e.offsetX, e.offsetY]
+  lastX = e.offsetX
+  lastY = e.offsetY
+}
+
+// set mouse down updates the x and y points
+canvas.addEventListener('mousedown', (e) => {
+  isDrawing = true
+  lastX = e.offsetX
+  lastY = e.offsetY
+})
+
+// canvas mouse event listeners
+canvas.addEventListener('mousemove', draw)
+canvas.addEventListener('mouseup', () => isDrawing = false)
+canvas.addEventListener('mouseout', () => isDrawing = false)
+
 </script>
 
 <style>
