@@ -96,6 +96,36 @@
   </div>
 
 <script>
+  // create variable to contain all checkboxes
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]')
+
+  // changable variable to mark selected checkbox
+  let lastChecked
+
+  function handleClick(e) {
+    // (flag variable)
+    let inBetween = false
+    // check if the shift key was pressed and box is checked
+    if (e.shiftKey && this.checked){
+      checkboxes.forEach(checkbox => {
+        console.log(checkbox)
+        // if the checkbox equals to a checked box or checkbox is the last checked
+        if (checkbox === this || checkbox === lastChecked) {
+          // toggles inBetween to opposite value
+          inBetween = !inBetween
+        }
+        if (inBetween) {
+          checkbox.checked = true
+        }
+      })
+    }
+
+    lastChecked = this
+  }
+
+  // loop through each checkbox and apply click event
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleClick))
+  
 </script>
 </body>
 </html>
