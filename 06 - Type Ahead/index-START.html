@@ -17,6 +17,66 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+// form empty cities array
+const cities = []
+
+// call the url to get the data using fetch
+fetch(endpoint)
+  // gives a promise of data back, data blob has to be converted to json (method found in data promise)
+  .then(blob => blob.json())
+  // the json data is then pushed to the empty array once it is 'spread' (...)
+  // spread opens the data array and inserts into the empty array instead of nesting it*
+  .then(data => cities.push(...data))
+
+// findMatches takes an arguement from the input field and the cities array
+function findMatches(wordToMatch, cities) {
+  // return the specific subset of the cities array, 'place'
+  return cities.filter(place => {
+    // find out if the city or state matches the input field
+    // 'g' is global, 'i' is incensitive and will match both lower and upper case
+    const regex = new RegExp(wordToMatch, 'gi')
+    // city and state that match input is returned
+    return place.city.match(regex) || place.state.match(regex)
+  })
+}
+
+// add commas to population
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// show the value of the input
+function displayMatches() {
+  // findMatches is called using the arguements of the input value and the cities array
+  const matchArray = findMatches(this.value, cities)
+  // create dropdown list in HTML during search
+  const html = matchArray.map(place => {
+    // takes the input value
+    const regex = new RegExp(this.value, 'gi')
+    // finds the city with the input value and applies a highlight over the input value
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`)
+    // finds the state with the input value and applies a highlight over the input value
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`)
+
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${place.population}</span>
+      </li>
+    `
+  }).join('') // changes map return from an array into a large string
+  suggestions.innerHTML = html
+}
+
+// create a variable for the 'search' input and 'suggestions'
+const searchInput = document.querySelector('.search')
+const suggestions = document.querySelector('.suggestions')
+
+// call displayMatches function when 'search' input has a change within and clicked out of
+searchInput.addEventListener('change', displayMatches)
+// call displayMatches f on each keyboard button press in 'search'
+searchInput.addEventListener('keyup', displayMatches)
+
 </script>
 </body>
 </html>
