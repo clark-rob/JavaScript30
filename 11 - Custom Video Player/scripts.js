@@ -12,8 +12,8 @@ const fullscreenButton = player.querySelector('.fullscreen_button')
 
 /* -------build functions----------- */
 // toggle between playing and pausing using ternery
-function togglePlay(e) {
-    console.log(e.offsetX, e.offsetY)
+function togglePlay() {
+    console.log(video.paused)
     video.paused ? video.play() : video.pause()
 }
 
@@ -49,6 +49,8 @@ function scrub(e) {
 // fullscreen button
 function fullscreen() {
     console.log("clicked!")
+    // player.style.width = `${100}%`
+    player.requestFullscreen()
 }
 
 /* ---------event listeners----------- */
